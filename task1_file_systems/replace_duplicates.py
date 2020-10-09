@@ -28,11 +28,11 @@ def handle_file(file_path: Path, stored_files: dict):
     md5 = get_md5(file_path)
     if md5 not in stored_files.keys():
         stored_files[md5] = file_path
-        print(f"Stored {file_path} with md5={md5}")
+        print(f"Stored {file_path} with {md5=}")
     else:
         file_path.unlink()
         stored_files[md5].link_to(file_path)
-        print(f"Created new hard link {file_path} to a file with md5={md5}")
+        print(f"Created new hard link {file_path} to a file with {md5=}")
 
 
 def handle_duplicates(path: str):
