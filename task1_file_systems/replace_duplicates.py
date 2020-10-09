@@ -22,7 +22,7 @@ def get_md5(path: Path) -> str:
 
 def handle_file(file_path: Path, stored_files: dict):
     """
-    Store file if it is the first ocurrence of this file.
+    Store file if it is the first occurrence of this file.
     Unlink and create a new hard link if a file with same md5 already exists.
     """
     md5 = get_md5(file_path)
