@@ -27,9 +27,17 @@ def handle_file(file_path: Path, stored_files: dict):
     """
     md5 = get_md5(file_path)
     if md5 not in stored_files.keys():
+        # File first occurrence. Store.
         stored_files[md5] = file_path
         print(f"Stored {file_path} with {md5=}")
+    elif file_path.stat().st_ino == stored_files[md5].stat().st_ino:
+        # Found hardlink. Do nothing.
+        return
+    elif file_path.is_symlink():
+        # Found symlink. Do nothing.
+        return
     else:
+        # Same content. Replace with hard link.
         file_path.unlink()
         stored_files[md5].link_to(file_path)
         print(f"Created new hard link {file_path} to a file with {md5=}")
