@@ -30,11 +30,13 @@ def handle_file(file_path: Path, stored_files: dict):
         # File first occurrence. Store.
         stored_files[md5] = file_path
         print(f"Stored {file_path} with {md5=}")
-    elif file_path.stat().st_ino == stored_files[md5].stat().st_ino:
-        # Found hardlink. Do nothing.
-        return
     elif file_path.is_symlink():
         # Found symlink. Do nothing.
+        print(f"Found symlink {file_path}")
+        return
+    elif (ino := file_path.stat().st_ino) == stored_files[md5].stat().st_ino:
+        # Found hardlink. Do nothing.
+        print(f"Found hard link {file_path} to {ino=} with {md5=}")
         return
     else:
         # Same content. Replace with hard link.
